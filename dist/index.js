@@ -2688,11 +2688,394 @@ exports["default"] = _default;
 
 /***/ }),
 
+/***/ 984:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.buildDockerImage = void 0;
+const core = __importStar(__nccwpck_require__(508));
+const utils_1 = __nccwpck_require__(777);
+const buildDockerImage = async ({ dockerfileName, dockerOptions, herokuAppName, cwd, processType, }) => {
+    try {
+        core.startGroup('Building docker container...');
+        await (0, utils_1.runCommand)(`docker build --file ${dockerfileName} ${dockerOptions} ` +
+            `--tag registry.heroku.com/${herokuAppName}/${processType} .`, { options: { cwd } });
+        console.log('Docker container built.');
+        core.endGroup();
+        return true;
+    }
+    catch (err) {
+        core.endGroup();
+        core.setFailed(`Building container failed.\nError: ${err instanceof Error ? err.message : 'Unknown'}`);
+        return false;
+    }
+};
+exports.buildDockerImage = buildDockerImage;
+
+
+/***/ }),
+
+/***/ 511:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.loginToHeroku = void 0;
+const core = __importStar(__nccwpck_require__(508));
+const utils_1 = __nccwpck_require__(777);
+const loginToHeroku = async ({ email, herokuApiKey, cwd }) => {
+    try {
+        core.startGroup('Logging into the Heroku docker registry...');
+        const data = await (0, utils_1.exec)(`echo ${herokuApiKey} | docker login --username=${email} registry.heroku.com --password-stdin`, { cwd });
+        console.log(data.stdout);
+        core.endGroup();
+        return true;
+    }
+    catch (err) {
+        core.endGroup();
+        core.setFailed(`Logging failed.\nError: ${(err instanceof Error) ? err.message : 'Unknown'}`);
+        return false;
+    }
+};
+exports.loginToHeroku = loginToHeroku;
+
+
+/***/ }),
+
+/***/ 576:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.pushDockerContainer = void 0;
+const core = __importStar(__nccwpck_require__(508));
+const utils_1 = __nccwpck_require__(777);
+const pushDockerContainer = async ({ herokuApiKey, herokuAppName, cwd, processType, }) => {
+    try {
+        core.startGroup('Pushing container to heroku registry...');
+        await (0, utils_1.runCommand)(`docker push registry.heroku.com/${herokuAppName}/${processType}`, {
+            env: { HEROKU_API_KEY: herokuApiKey },
+            options: { cwd },
+        });
+        console.log('Container pushed.');
+        core.endGroup();
+        return true;
+    }
+    catch (err) {
+        core.endGroup();
+        core.setFailed(`Pushing docker container failed.\nError ${err instanceof Error ? err.message : 'Unknown'}`);
+        return false;
+    }
+};
+exports.pushDockerContainer = pushDockerContainer;
+
+
+/***/ }),
+
+/***/ 212:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.releaseDockerContainer = void 0;
+const core = __importStar(__nccwpck_require__(508));
+const utils_1 = __nccwpck_require__(777);
+const releaseDockerContainer = async ({ herokuApiKey, herokuAppName, cwd, processType, }) => {
+    try {
+        core.startGroup('Releasing container...');
+        await (0, utils_1.runCommand)(`heroku container:release ${processType} --app ${herokuAppName}`, {
+            env: { HEROKU_API_KEY: herokuApiKey },
+            options: { cwd },
+        });
+        console.log('Container released.');
+        core.endGroup();
+        return true;
+    }
+    catch (err) {
+        core.endGroup();
+        core.setFailed(`Releasing docker container failed.\nError: ${err instanceof Error ? err.message : 'Unknown'}`);
+        return false;
+    }
+};
+exports.releaseDockerContainer = releaseDockerContainer;
+
+
+/***/ }),
+
+/***/ 340:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const core = __importStar(__nccwpck_require__(508));
+const login_to_heroku_1 = __nccwpck_require__(511);
+const build_docker_image_1 = __nccwpck_require__(984);
+const push_docker_container_1 = __nccwpck_require__(576);
+const release_docker_container_1 = __nccwpck_require__(212);
+const assert_1 = __importDefault(__nccwpck_require__(491));
+const utils_1 = __nccwpck_require__(777);
+const path_1 = __importDefault(__nccwpck_require__(17));
+const DEFAULT_DOCKERFILE_NAME = 'Dockerfile';
+const DEFAULT_PROCESS_TYPE = 'web';
+const DEFAULT_DOCKER_OPTIONS = '';
+(async () => {
+    try {
+        const email = core.getInput('email', { required: true });
+        const herokuApiKey = core.getInput('heroku_api_key', { required: true });
+        const herokuAppName = core.getInput('heroku_app_name', { required: true });
+        const dockerFileDirectory = core.getInput('dockerfile_directory', { required: true });
+        const dockerfileName = core.getInput('dockerfile_name') || DEFAULT_DOCKERFILE_NAME;
+        const dockerOptions = core.getInput('docker_options') || DEFAULT_DOCKER_OPTIONS;
+        const processType = core.getInput('process_type') || DEFAULT_PROCESS_TYPE;
+        (0, assert_1.default)(email, 'Missing required field: `email`.');
+        (0, assert_1.default)(herokuApiKey, 'Missing required field: `heroku_api_key`.');
+        (0, assert_1.default)(herokuAppName, 'Missing required field: `heroku_app_name`.');
+        (0, assert_1.default)(dockerFileDirectory, 'Missing required field: `dockerfile_directory`.');
+        const cwd = (0, utils_1.getCwdFromPath)(dockerFileDirectory);
+        (0, utils_1.assertDirExists)(cwd);
+        const dockerFilePath = path_1.default.join(dockerFileDirectory, dockerfileName);
+        (0, utils_1.assertFileExists)(dockerFilePath);
+        const logged = await (0, login_to_heroku_1.loginToHeroku)({
+            email,
+            herokuApiKey,
+            cwd,
+        });
+        if (!logged)
+            return;
+        const built = await (0, build_docker_image_1.buildDockerImage)({
+            dockerfileName,
+            dockerOptions,
+            herokuAppName,
+            cwd,
+            processType,
+        });
+        if (!built)
+            return;
+        const pushed = await (0, push_docker_container_1.pushDockerContainer)({
+            herokuApiKey,
+            herokuAppName,
+            cwd,
+            processType,
+        });
+        if (!pushed)
+            return;
+        const released = await (0, release_docker_container_1.releaseDockerContainer)({
+            herokuApiKey,
+            herokuAppName,
+            cwd,
+            processType,
+        });
+        if (!released)
+            return;
+        console.log('Successfully deployed! 💪 🚀');
+    }
+    catch (err) {
+        core.setFailed(`Something goes wrong 😧.\nError: ${err instanceof Error ? err.message : 'Unknown'}`);
+    }
+})();
+
+
+/***/ }),
+
+/***/ 777:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.runCommand = exports.assertFileExists = exports.assertDirExists = exports.getCwdFromPath = exports.exec = void 0;
+const child_process_1 = __importDefault(__nccwpck_require__(81));
+const util_1 = __nccwpck_require__(837);
+const path_1 = __importDefault(__nccwpck_require__(17));
+const fs_1 = __importDefault(__nccwpck_require__(147));
+const child_process_2 = __nccwpck_require__(81);
+const assert_1 = __importDefault(__nccwpck_require__(491));
+exports.exec = (0, util_1.promisify)(child_process_1.default.exec);
+const getCwdFromPath = (path) => {
+    (0, assert_1.default)(path, 'Path cannot be null or undefined.');
+    const cwd = process.cwd();
+    return path_1.default.join(cwd, path);
+};
+exports.getCwdFromPath = getCwdFromPath;
+const assertDirExists = (dirPath) => {
+    const directoryExists = fs_1.default.existsSync(dirPath);
+    (0, assert_1.default)(directoryExists, `Directory: "${dirPath}" does not exist.`);
+};
+exports.assertDirExists = assertDirExists;
+const assertFileExists = (path) => {
+    const directoryExists = fs_1.default.existsSync(path);
+    (0, assert_1.default)(directoryExists, `File: "${path}" does not exist.`);
+};
+exports.assertFileExists = assertFileExists;
+const runCommand = async (command, { options, env } = {}) => {
+    const parts = command.split(' ').filter((part) => Boolean(part));
+    if (parts.length === 0)
+        throw new Error('Wrong command provided');
+    return new Promise((resolve, reject) => {
+        const args = parts.slice(1, parts.length);
+        const processEnv = Object.create(process.env);
+        const commandEnv = Object.assign(processEnv, env);
+        const command = (0, child_process_2.spawn)(parts[0], args, {
+            ...options,
+            env: commandEnv,
+            stdio: 'inherit',
+        });
+        const onExit = (code) => {
+            if (code === 0)
+                resolve(code);
+            else
+                reject(code);
+        };
+        command.on('exit', onExit);
+        command.on('close', onExit);
+        command.on('error', reject);
+    });
+};
+exports.runCommand = runCommand;
+
+
+/***/ }),
+
 /***/ 491:
 /***/ ((module) => {
 
 "use strict";
 module.exports = require("assert");
+
+/***/ }),
+
+/***/ 81:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("child_process");
 
 /***/ }),
 
@@ -2809,269 +3192,17 @@ module.exports = require("util");
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__nccwpck_require__.n = (module) => {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				() => (module['default']) :
-/******/ 				() => (module);
-/******/ 			__nccwpck_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__nccwpck_require__.d = (exports, definition) => {
-/******/ 			for(var key in definition) {
-/******/ 				if(__nccwpck_require__.o(definition, key) && !__nccwpck_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__nccwpck_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
-/******/ 		// define __esModule on exports
-/******/ 		__nccwpck_require__.r = (exports) => {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/compat */
 /******/ 	
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
 /******/ 	
 /************************************************************************/
-var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
-(() => {
-"use strict";
-// ESM COMPAT FLAG
-__nccwpck_require__.r(__webpack_exports__);
-
-// EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
-var core = __nccwpck_require__(508);
-;// CONCATENATED MODULE: external "child_process"
-const external_child_process_namespaceObject = require("child_process");
-var external_child_process_default = /*#__PURE__*/__nccwpck_require__.n(external_child_process_namespaceObject);
-// EXTERNAL MODULE: external "util"
-var external_util_ = __nccwpck_require__(837);
-// EXTERNAL MODULE: external "path"
-var external_path_ = __nccwpck_require__(17);
-var external_path_default = /*#__PURE__*/__nccwpck_require__.n(external_path_);
-// EXTERNAL MODULE: external "fs"
-var external_fs_ = __nccwpck_require__(147);
-var external_fs_default = /*#__PURE__*/__nccwpck_require__.n(external_fs_);
-// EXTERNAL MODULE: external "assert"
-var external_assert_ = __nccwpck_require__(491);
-var external_assert_default = /*#__PURE__*/__nccwpck_require__.n(external_assert_);
-;// CONCATENATED MODULE: ./src/utils.ts
-
-
-
-
-
-
-const exec = (0,external_util_.promisify)((external_child_process_default()).exec);
-const getCwdFromPath = (path) => {
-    external_assert_default()(path, 'Path cannot be null or undefined.');
-    const cwd = process.cwd();
-    return external_path_default().join(cwd, path);
-};
-const assertDirExists = (dirPath) => {
-    const directoryExists = external_fs_default().existsSync(dirPath);
-    external_assert_default()(directoryExists, `Directory: "${dirPath}" does not exist.`);
-};
-const assertFileExists = (path) => {
-    const directoryExists = external_fs_default().existsSync(path);
-    external_assert_default()(directoryExists, `File: "${path}" does not exist.`);
-};
-const runCommand = async (command, { options, env } = {}) => {
-    const parts = command.split(' ').filter((part) => Boolean(part));
-    if (parts.length === 0)
-        throw new Error('Wrong command provided');
-    return new Promise((resolve, reject) => {
-        const args = parts.slice(1, parts.length);
-        const processEnv = Object.create(process.env);
-        const commandEnv = Object.assign(processEnv, env);
-        const command = (0,external_child_process_namespaceObject.spawn)(parts[0], args, {
-            ...options,
-            env: commandEnv,
-            stdio: 'inherit',
-        });
-        const onExit = (code) => {
-            if (code === 0)
-                resolve(code);
-            else
-                reject(code);
-        };
-        command.on('exit', onExit);
-        command.on('close', onExit);
-        command.on('error', reject);
-    });
-};
-
-;// CONCATENATED MODULE: ./src/heroku/login_to_heroku.ts
-
-
-const loginToHeroku = async ({ email, herokuApiKey, cwd }) => {
-    try {
-        core.startGroup('Logging into the Heroku docker registry...');
-        const data = await exec(`echo ${herokuApiKey} | docker login --username=${email} registry.heroku.com --password-stdin`, { cwd });
-        console.log(data.stdout);
-        core.endGroup();
-        return true;
-    }
-    catch (err) {
-        core.endGroup();
-        core.setFailed(`Logging failed.\nError: ${(err instanceof Error) ? err.message : 'Unknown'}`);
-        return false;
-    }
-};
-
-;// CONCATENATED MODULE: ./src/heroku/build_docker_image.ts
-
-
-const buildDockerImage = async ({ dockerfileName, dockerOptions, herokuAppName, cwd, processType, }) => {
-    try {
-        core.startGroup('Building docker container...');
-        await runCommand(`docker build --file ${dockerfileName} ${dockerOptions} ` +
-            `--tag registry.heroku.com/${herokuAppName}/${processType} .`, { options: { cwd } });
-        console.log('Docker container built.');
-        core.endGroup();
-        return true;
-    }
-    catch (err) {
-        core.endGroup();
-        core.setFailed(`Building container failed.\nError: ${err instanceof Error ? err.message : 'Unknown'}`);
-        return false;
-    }
-};
-
-;// CONCATENATED MODULE: ./src/heroku/push_docker_container.ts
-
-
-const pushDockerContainer = async ({ herokuApiKey, herokuAppName, cwd, processType, }) => {
-    try {
-        core.startGroup('Pushing container to heroku registry...');
-        await runCommand(`docker push registry.heroku.com/${herokuAppName}/${processType}`, {
-            env: { HEROKU_API_KEY: herokuApiKey },
-            options: { cwd },
-        });
-        console.log('Container pushed.');
-        core.endGroup();
-        return true;
-    }
-    catch (err) {
-        core.endGroup();
-        core.setFailed(`Pushing docker container failed.\nError ${err instanceof Error ? err.message : 'Unknown'}`);
-        return false;
-    }
-};
-
-;// CONCATENATED MODULE: ./src/heroku/release_docker_container.ts
-
-
-const releaseDockerContainer = async ({ herokuApiKey, herokuAppName, cwd, processType, }) => {
-    try {
-        core.startGroup('Releasing container...');
-        await runCommand(`heroku container:release ${processType} --app ${herokuAppName}`, {
-            env: { HEROKU_API_KEY: herokuApiKey },
-            options: { cwd },
-        });
-        console.log('Container released.');
-        core.endGroup();
-        return true;
-    }
-    catch (err) {
-        core.endGroup();
-        core.setFailed(`Releasing docker container failed.\nError: ${err instanceof Error ? err.message : 'Unknown'}`);
-        return false;
-    }
-};
-
-;// CONCATENATED MODULE: ./src/main.ts
-
-
-
-
-
-
-
-
-const DEFAULT_DOCKERFILE_NAME = 'Dockerfile';
-const DEFAULT_PROCESS_TYPE = 'web';
-const DEFAULT_DOCKER_OPTIONS = '';
-(async () => {
-    try {
-        const email = core.getInput('email', { required: true });
-        const herokuApiKey = core.getInput('heroku_api_key', { required: true });
-        const herokuAppName = core.getInput('heroku_app_name', { required: true });
-        const dockerFileDirectory = core.getInput('dockerfile_directory', { required: true });
-        const dockerfileName = core.getInput('dockerfile_name') || DEFAULT_DOCKERFILE_NAME;
-        const dockerOptions = core.getInput('docker_options') || DEFAULT_DOCKER_OPTIONS;
-        const processType = core.getInput('process_type') || DEFAULT_PROCESS_TYPE;
-        external_assert_default()(email, 'Missing required field: `email`.');
-        external_assert_default()(herokuApiKey, 'Missing required field: `heroku_api_key`.');
-        external_assert_default()(herokuAppName, 'Missing required field: `heroku_app_name`.');
-        external_assert_default()(dockerFileDirectory, 'Missing required field: `dockerfile_directory`.');
-        const cwd = getCwdFromPath(dockerFileDirectory);
-        assertDirExists(cwd);
-        const dockerFilePath = external_path_default().join(dockerFileDirectory, dockerfileName);
-        assertFileExists(dockerFilePath);
-        const logged = await loginToHeroku({
-            email,
-            herokuApiKey,
-            cwd,
-        });
-        if (!logged)
-            return;
-        const built = await buildDockerImage({
-            dockerfileName,
-            dockerOptions,
-            herokuAppName,
-            cwd,
-            processType,
-        });
-        if (!built)
-            return;
-        const pushed = await pushDockerContainer({
-            herokuApiKey,
-            herokuAppName,
-            cwd,
-            processType,
-        });
-        if (!pushed)
-            return;
-        const released = await releaseDockerContainer({
-            herokuApiKey,
-            herokuAppName,
-            cwd,
-            processType,
-        });
-        if (!released)
-            return;
-        console.log('Successfully deployed! 💪 🚀');
-    }
-    catch (err) {
-        core.setFailed(`Something goes wrong 😧.\nError: ${err instanceof Error ? err.message : 'Unknown'}`);
-    }
-})();
-
-})();
-
-module.exports = __webpack_exports__;
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = __nccwpck_require__(340);
+/******/ 	module.exports = __webpack_exports__;
+/******/ 	
 /******/ })()
 ;

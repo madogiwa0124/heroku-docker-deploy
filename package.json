@@ -1,14 +1,14 @@
 {
     "name": "heroku-docker-deploy",
-    "version": "1.5.1",
+    "version": "1.5.0",
     "license": "MIT",
     "author": "Johnny Benson (and Kamil Klyta)",
     "description": "Build, Push and Release a Docker container to Heroku.",
     "main": "src/main.ts",
-    "homepage": "https://github.com/gonuit/heroku-docker-deploy",
+    "homepage": "https://github.com/johnnybenson/heroku-docker-deploy",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/gonuit/heroku-docker-deploy.git"
+        "url": "git+https://github.com/johnnybenson/heroku-docker-deploy.git"
     },
     "scripts": {
         "build": "npx @vercel/ncc build src/main.ts",

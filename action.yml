@@ -1,6 +1,6 @@
-name: 'Build, Push and Release a Docker container to Heroku.'
+name: 'Build, Push & Release a Docker container to Heroku'
 author: 'Johnny Benson (and Kamil Klyta)'
-description: 'Build, Push and Release a Docker container to Heroku.'
+description: 'Build, Push & Release a Docker container to Heroku'
 inputs:
   heroku_app_name:
     description: 'Name of the heroku application to which the build is to be sent.'

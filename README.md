@@ -1,13 +1,13 @@
 # Heroku Docker Deploy - GitHub Action
 
-Build, Push and Release a Docker container to Heroku 🚀.
+Build, Push & Release a Docker container to Heroku 🚀.
 
 ## Getting started
 
 ### Your GitHub action workflow file might look like this:
 ```yml
 # Your workflow name.
-name: Deploy to heroku.
+name: Deploy to Heroku
 
 # Run workflow on every push to master branch.
 on:
@@ -21,12 +21,11 @@ jobs:
     steps:
       # Check-out your repository.
       - name: Checkout
-        uses: actions/checkout@v2
-
+        uses: actions/checkout@v3
 
 ### ⬇ IMPORTANT PART ⬇ ###
 
-      - name: Build, Push and Release a Docker container to Heroku. # Your custom step name
+      - name: Build, Push & Release a Docker container to Heroku. # Your custom step name
         uses: johnnybenson/heroku-docker-deploy@v1.5.1 # GitHub action name (leave it as it is).
         with:
           # Below you must provide variables for your Heroku app.
@@ -61,8 +60,6 @@ jobs:
           # By default, this argument is set to "web".
           # For more information look at https://devcenter.heroku.com/articles/process-model
           process_type: web
-
-
 
 ### ⬆ IMPORTANT PART ⬆ ###
 ```

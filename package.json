@@ -1,6 +1,6 @@
 {
     "name": "heroku-docker-deploy",
-    "version": "1.3.2",
+    "version": "1.5.0",
     "license": "MIT",
     "author": "Johnny Benson (and Kamil Klyta)",
     "description": "Build, Push and Release a Docker container to Heroku.",

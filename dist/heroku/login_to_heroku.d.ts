@@ -1,4 +1,4 @@
-declare type HerokuCredentials = {
+type HerokuCredentials = {
     email: string;
     herokuApiKey: string;
     cwd: string;

@@ -1,34 +1,34 @@
 {
-  "name": "heroku-docker-deploy",
-  "version": "1.3.2",
-  "license": "MIT",
-  "author": "Kamil Klyta",
-  "description": "Build, Push and Release a Docker container to Heroku.",
-  "main": "src/main.ts",
-  "homepage": "https://github.com/gonuit/heroku-docker-deploy",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/gonuit/heroku-docker-deploy.git"
-  },
-  "scripts": {
-    "echo": "echo COMMAND",
-    "build": "npx @zeit/ncc build src/main.ts",
-    "lint": "eslint \"**/*.ts\"",
-    "fix": "eslint \"**/*.ts\" --fix"
-  },
-  "dependencies": {
-    "@actions/core": "^1.10.0",
-    "@actions/github": "^5.1.1",
-    "assert": "^2.0.0"
-  },
-  "devDependencies": {
-    "@types/eslint": "^8.21.1",
-    "@typescript-eslint/eslint-plugin": "^5.53.0",
-    "@typescript-eslint/parser": "^5.53.0",
-    "eslint": "^8.34.0",
-    "eslint-config-prettier": "^8.6.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "prettier": "^2.8.4",
-    "typescript": "^4.9.5"
-  }
+    "name": "heroku-docker-deploy",
+    "version": "1.3.2",
+    "license": "MIT",
+    "author": "Johnny Benson (and Kamil Klyta)",
+    "description": "Build, Push and Release a Docker container to Heroku.",
+    "main": "src/main.ts",
+    "homepage": "https://github.com/gonuit/heroku-docker-deploy",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/gonuit/heroku-docker-deploy.git"
+    },
+    "scripts": {
+        "build": "npx @vercel/ncc build src/main.ts",
+        "lint": "eslint \"**/*.ts\"",
+        "fix": "eslint \"**/*.ts\" --fix"
+    },
+    "dependencies": {
+        "@actions/core": "^1.10.0",
+        "@actions/github": "^5.1.1",
+        "assert": "^2.0.0"
+    },
+    "devDependencies": {
+        "@types/assert": "^1.5.6",
+        "@types/eslint": "^8.21.1",
+        "@types/node": "^18.14.0",
+        "@typescript-eslint/eslint-plugin": "^5.53.0",
+        "@typescript-eslint/parser": "^5.53.0",
+        "eslint": "^8.34.0",
+        "eslint-config-prettier": "^8.6.0",
+        "eslint-plugin-prettier": "^4.2.1",
+        "typescript": "^4.9.5"
+    }
 }

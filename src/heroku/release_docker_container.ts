@@ -23,7 +23,16 @@ export const releaseDockerContainer = async ({
         return true;
     } catch (err) {
         core.endGroup();
-        core.setFailed(`Releasing docker container failed.\nError: ${err instanceof Error ? err.message : 'Unknown'}`);
-        return false;
+        if (err instanceof Error) {
+            core.setFailed(`Releasing docker container failed.\nError: ${ err.message }`);
+            return false;
+        } else {
+            console.error(`Releasing docker container failed.\nError: ${err}`);
+            // FIXME: This is a workaround for the following error:
+            // TypeError: Cannot read properties of undefined (reading 'statusCode')
+            // https://github.com/heroku/cli/issues/3142
+            console.log('Container released by workaround.');
+            return true;
+        }
     }
 };

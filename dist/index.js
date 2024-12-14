@@ -3596,8 +3596,15 @@ const releaseDockerContainer = async ({ herokuApiKey, herokuAppName, cwd, proces
     }
     catch (err) {
         core.endGroup();
-        core.setFailed(`Releasing docker container failed.\nError: ${err instanceof Error ? err.message : 'Unknown'}`);
-        return false;
+        if (err instanceof Error) {
+            core.setFailed(`Releasing docker container failed.\nError: ${err.message}`);
+            return false;
+        }
+        else {
+            console.error(`Releasing docker container failed.\nError: ${err}`);
+            console.log('Container released by workaround.');
+            return true;
+        }
     }
 };
 exports.releaseDockerContainer = releaseDockerContainer;
